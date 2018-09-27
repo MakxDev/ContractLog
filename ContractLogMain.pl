@@ -7,15 +7,17 @@
 
 % Зададим № договора; '1' - номер контракта, с которым работаем
 contract('1').
+current_contract(C) :- contract(C), C = '1'.
+
 % Зададим дату начала договора
-contract_start_date(C, D) :- contract(C), D = date(2016, 11, 18).
+contract_start_date(C, D) :- current_contract(C), D = date(2016, 11, 18).
 % Зададим дату конца договора 
-contract_end_date(C, D) :- contract(C), D = date(2016, 12, 31).
+contract_end_date(C, D) :- current_contract(C), D = date(2016, 12, 31).
 % Зададим сумму договора
-contract_sum(C, Sum) :- contract(C), Sum = 38143437.5.
+contract_sum(C, Sum) :- current_contract(C), Sum = 38143437.5.
 
 % Зададим этапы договора: [1 и 2]
-contract_stages(C, [1, 2]) :- contract(C).
+contract_stages(C, [1, 2]) :- current_contract(C).
 contract_stage(C, S) :- contract_stages(C, SS), member(S, SS).
 
 % Зададим даты начала и завершения этапов договора
@@ -27,7 +29,7 @@ contract_stage_end_date(C, S, D) :- contract_stage(C, S), S = 2, D = date(2016, 
 
 % Проверка что дата завершения любого этапа меньше даты завершения договора
 validate_contract_dates(C) :- contract_stages(C, L), contract_end_date(C, D), !, validate_contract_dates(C, L, D).
-validate_contract_dates(C, [], _) :- contract(C).
+validate_contract_dates(C, [], _) :- current_contract(C).
 validate_contract_dates(C, [H|T], D) :- contract_stage_end_date(C, H, D2), D2 @< D, validate_contract_dates(C, T, D).
 
 % Зададим суммы этапов договора
@@ -58,15 +60,15 @@ is_contract_stage_expired(C, S) :- contract_stage_end_date(C, S, Date),
 
 % Проверка что сумма договора равна сумме сумм этапов
 validate_contract_sum(C) :- contract_stages(C, [H|T]), contract_sum(C, CSum), sum_contract_stages_sum(C, [H|T], SSum), CSum == SSum, !.
-sum_contract_stages_sum(C, [], Sum) :- contract(C), Sum = 0.
+sum_contract_stages_sum(C, [], Sum) :- current_contract(C), Sum = 0.
 sum_contract_stages_sum(C, [H|T], Sum) :- contract_stage_sum(C, H, Sum1), sum_contract_stages_sum(C, T, Sum2), Sum is Sum1 + Sum2.
 
 % Зададим условие оплаты по договору (отсрочка в днях)
-contract_payment_condition(C, Days) :- contract(C), Days = 0.
+contract_payment_condition(C, Days) :- current_contract(C), Days = 0.
 
 % Зададим пени по контракту (10% годовых за каждый день просрочки)
-contract_delivery_fine(C, Percent) :- contract(C), Percent = 10.
-contract_payment_fine(C, Percent) :-  contract(C), Percent = 10.
+contract_delivery_fine(C, Percent) :- current_contract(C), Percent = 10.
+contract_payment_fine(C, Percent) :-  current_contract(C), Percent = 10.
 
 % Зададим даты поставки по этапу (факт доставки)
 contract_stage_delivery(C, S, D) :- contract_stage(C, S), S = 1, D = date(2016, 12, 20).
@@ -121,7 +123,7 @@ calulate_payment_fine(C, S, Fine) :- is_contract_payment_expired(C, S),
 	Fine is Sum*Percent/100*(Days-PayDelayDays)/365.
 
 % Зададим срок исковой давности (1 год = 365 дней)
-contract_statue_of_limitations(C, Days) :- contract(C), Days = 365.
+contract_statue_of_limitations(C, Days) :- current_contract(C), Days = 365.
 
 % Вычислим срок исковой давности по поставке для договора (пока тупо от даты окончания договора)
 get_contract_statute_of_delivery(C, Date) :- contract_end_date(C, D1),
