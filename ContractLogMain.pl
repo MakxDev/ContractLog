@@ -21,8 +21,8 @@ contract_stages(C, [1, 2]) :- current_contract(C).
 contract_stage(C, S) :- contract_stages(C, SS), member(S, SS).
 
 % Зададим даты начала и завершения этапов договора
-contract_stage_start_date(C, S, D) :- contract_stage(C, S), S = 1, D = date(2016, 11, 18), !.
-contract_stage_start_date(C, S, D) :- contract_stage(C, S), S = 2, D = date(2000, 11, 20), !.
+contract_stage_start_date(C, S, D) :- contract_stage(C, S), S = 1, D = date(2016, 11, 18).
+contract_stage_start_date(C, S, D) :- contract_stage(C, S), S = 2, D = date(2016, 11, 20).
 
 contract_stage_end_date(C, S, D) :- contract_stage(C, S), S = 1, D = date(2016, 11, 20), !.
 contract_stage_end_date(C, S, D) :- contract_stage(C, S), S = 2, D = date(2016, 11, 25), !.
