@@ -120,5 +120,32 @@ calulate_payment_fine(C, S, Fine) :- is_contract_payment_expired(C, S),
 	calculate_payment_delay(C, S, Days),
 	Fine is Sum*Percent/100*(Days-PayDelayDays)/365.
 
+% Зададим срок исковой давности (1 год = 365 дней)
+contract_statue_of_limitations(C, Days) :- contract(C), Days = 365.
+
+% Вычислим срок исковой давности по поставке для договора (пока тупо от даты окончания договора)
+get_contract_statute_of_delivery(C, Date) :- contract_end_date(C, D1),
+	contract_statue_of_limitations(C, Days),
+	date_time_stamp(D1, S1),
+	S2 is S1 + (Days + 1)*86400,
+	stamp_date_time(S2, D2, 0), date_time_value(date, D2, Date).
+
+% Проверим что срок исковой давности по поставке не вышел
+is_contract_in_statute_of_delivery(C) :- get_contract_statute_of_delivery(C, Date),
+	today(Now),
+	not(is_date_expired(Date, Now)).
+
+% Вычислим срок исковой давности по оплате для договора (пока тупо от даты окончания договора)
+get_contract_statute_of_payment(C, Date) :- contract_end_date(C, D1),
+	contract_statue_of_limitations(C, Days),
+	date_time_stamp(D1, S1),
+	S2 is S1 + (Days + 1)*86400,
+	stamp_date_time(S2, D2, 0), date_time_value(date, D2, Date).
+
+% Проверим что срок исковой давности по оплате не вышел
+is_contract_in_statute_of_payment(C) :- get_contract_statute_of_payment(C, Date),
+	today(Now),
+	not(is_date_expired(Date, Now)).
+
 % main для проверки условий договора // требуется в SublimeText
 main :- validate_contract_sum('1'), validate_contract_dates('1').
