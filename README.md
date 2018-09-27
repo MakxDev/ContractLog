@@ -27,38 +27,77 @@
    Параметры договора и его этапов задаются в виде предикатов, в комментриях обозначены как "Зададим ..."
 
 1. Проверим, что сумма этапов равна сумме договора:
+```
 ?- validate_contract_sum('1').
-...
+true.
+```
 
 2. Проверим, что дата завершения любого этапа меньше даты завершения договора
+```
 ?- validate_contract_dates('1').
-...
+true.
+```
 
 3. Получим дату и сумму подписанного акта по этапу:
+```
 ?- contract_stage_delivery_act('1', 1, Date, Sum).
 Date = ...
 Sum = ...
+```
 
 4. Вычислим количество дней просрочки поставки по этапу:
+```
 ?- calculate_delivery_delay('1', 1, Days).
 Days = ...
 
 ?- calculate_delivery_delay('1', 2, Days).
 Days = ...
+```
 
 5. Вычислим количество дней просрочки платежа по этапу:
+```
 ?- calculate_payment_delay('1', 1, Days).
 Days = ...
 
 ?- calculate_payment_delay('1', 2, Days).
 Days = ...
+```
 
 6. Вычислим штраф за задержку поставки по этапу:
+```
 ?- calulate_delivery_fine('1', 1, Fine).
 Fine = ...
+```
 
 7. Вычислим штраф за задержку оплаты по этапу:
+```
 ?- calulate_payment_fine('1', 1, Fine).
 Fine = ...
 
 ?- calulate_payment_fine('1', 2, Fine).
+Fine = ...
+```
+
+8. Вычислим дату исковой давности по поставке:
+```
+?- get_contract_statute_of_delivery('1', Date).
+Date = ...
+```
+
+9. Проверим что срок исковой давности по поставке не вышел
+```
+?- is_contract_in_statute_of_delivery('1').
+false.
+```
+
+10. Вычислим дату исковой давности по оплате:
+```
+?- get_contract_statute_of_payment('1', Date).
+Date = ...
+```
+
+11. Проверим что срок исковой давности по оплате не вышел
+```
+?- is_contract_in_statute_of_payment('1').
+true.
+```
