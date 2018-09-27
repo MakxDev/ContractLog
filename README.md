@@ -33,20 +33,20 @@ true.
 ```
 
 2. Проверим, что дата завершения любого этапа меньше даты завершения договора
-```
+```Prolog
 ?- validate_contract_dates('1').
 true.
 ```
 
 3. Получим дату и сумму подписанного акта по этапу:
-```
+```Prolog
 ?- contract_stage_delivery_act('1', 1, Date, Sum).
 Date = ...
 Sum = ...
 ```
 
 4. Вычислим количество дней просрочки поставки по этапу:
-```
+```Prolog
 ?- calculate_delivery_delay('1', 1, Days).
 Days = ...
 
@@ -55,7 +55,7 @@ Days = ...
 ```
 
 5. Вычислим количество дней просрочки платежа по этапу:
-```
+```Prolog
 ?- calculate_payment_delay('1', 1, Days).
 Days = ...
 
@@ -64,13 +64,13 @@ Days = ...
 ```
 
 6. Вычислим штраф за задержку поставки по этапу:
-```
+```Prolog
 ?- calulate_delivery_fine('1', 1, Fine).
 Fine = ...
 ```
 
 7. Вычислим штраф за задержку оплаты по этапу:
-```
+```Prolog
 ?- calulate_payment_fine('1', 1, Fine).
 Fine = ...
 
@@ -79,25 +79,25 @@ Fine = ...
 ```
 
 8. Вычислим дату исковой давности по поставке:
-```
+```Prolog
 ?- get_contract_statute_of_delivery('1', Date).
 Date = ...
 ```
 
 9. Проверим что срок исковой давности по поставке не вышел
-```
+```Prolog
 ?- is_contract_in_statute_of_delivery('1').
 false.
 ```
 
 10. Вычислим дату исковой давности по оплате:
-```
+```Prolog
 ?- get_contract_statute_of_payment('1', Date).
 Date = ...
 ```
 
 11. Проверим что срок исковой давности по оплате не вышел
-```
+```Prolog
 ?- is_contract_in_statute_of_payment('1').
 true.
 ```
